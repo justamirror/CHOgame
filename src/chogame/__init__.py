@@ -2,6 +2,13 @@ def clear():
 	print("\033c\033[3J\033[2J\033[0m\033[H", end='')
 class empty: pass
 empty = empty()
+import json
+import math
+def convertToNumber (s):
+    return int.from_bytes(s.encode(), 'little')
+
+def convertFromNumber (n):
+    return n.to_bytes(math.ceil(n.bit_length() / 8), 'little').decode()
 class path:
 	def __init__(self, chogame, func, parent=None, id=None, name=None):
 		self.func = func
@@ -74,6 +81,11 @@ class context:
 class CHOgame:
 	def __init__(self):
 		self.rooms = {}
+		self.save = {}
+	def save_game(self):
+		return str(convertToNumber(json.dumps(self.save)))
+	def load_game(self, save):
+		self.save = json.loads(convertFromNumber(int(save)))
 	def title(self, func):
 		self.title_func = path(self, func, None, 'title')
 		self.title_func.is_title = True
